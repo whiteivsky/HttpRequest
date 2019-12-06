@@ -13,14 +13,12 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 
 public class HttpRequest {
-
-
     // Свойства класса
     private URL url;
     private String query;                //Запрос Query, тело запроса POST
     private String postResult = "";            //Результат (ответ) в виде JSON
     private HttpsURLConnection httpsConnection;
-    private String authorization = "authorization";
+    private String authorization ="authorization";
     private String authorizationToken = "0fdbf21e69e34f7dab68bb207dbe45eb";
 
 
@@ -54,8 +52,9 @@ public class HttpRequest {
 
         try {
 
-            //System.out.println(authorization+"->"+ authorizationToken);
-            httpsConnection.setRequestProperty(authorization, authorizationToken);
+            System.out.println(authorization+"->"+ authorizationToken);
+            httpsConnection.setRequestProperty("authorization", "0fdbf21e69e34f7dab68bb207dbe45eb");
+//            httpsConnection.setRequestProperty(authorization, authorizationToken);
             httpsConnection.setDoOutput(true);
             OutputStream os = httpsConnection.getOutputStream();
             os.write(query.getBytes());
