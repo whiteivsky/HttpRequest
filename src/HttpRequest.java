@@ -1,5 +1,3 @@
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -16,9 +14,9 @@ public class HttpRequest {
     // Свойства класса
     private URL url;
     private String query;                //Запрос Query, тело запроса POST
-    private String postResult = "";            //Результат (ответ) в виде JSON
+    //Результат (ответ) в виде JSON
     private HttpsURLConnection httpsConnection;
-    private String authorization ="authorization";
+    private String authorization = "authorization";
     private String authorizationToken = "0fdbf21e69e34f7dab68bb207dbe45eb";
 
 
@@ -49,12 +47,13 @@ public class HttpRequest {
     }
 
     public String InvokeHTTP_POST() {
-
+        StringBuilder postResult = new StringBuilder();
         try {
 
-            System.out.println(authorization+"->"+ authorizationToken);
+           // System.out.println(authorization + "->" + authorizationToken);
+           // httpsConnection.setRequestProperty(authorization, authorizationToken);
+            //todo Разобраться почему не всегода работает подключение
             httpsConnection.setRequestProperty("authorization", "0fdbf21e69e34f7dab68bb207dbe45eb");
-//            httpsConnection.setRequestProperty(authorization, authorizationToken);
             httpsConnection.setDoOutput(true);
             OutputStream os = httpsConnection.getOutputStream();
             os.write(query.getBytes());
@@ -65,23 +64,24 @@ public class HttpRequest {
                 BufferedReader rd;
                 String line;
                 rd = new BufferedReader(new InputStreamReader(httpsConnection.getInputStream(), "UTF-8"));
-                postResult = String.valueOf(httpsConnection.getResponseCode());
+
+                postResult.append(httpsConnection.getResponseCode());
                 while ((line = rd.readLine()) != null) {
-                    postResult += line;
+                    postResult.append(postResult).append(line);
                 }
                 rd.close();
                 httpsConnection.disconnect();
-                return postResult ;
+                return postResult.toString();
             }
 
-            postResult = httpsConnection.getResponseCode() + "----" + httpsConnection.getResponseMessage() + " ~~ " + query.toString();
+            postResult.append(httpsConnection.getResponseCode() + "----" + httpsConnection.getResponseMessage() + " ~~ " + query.toString());
             httpsConnection.disconnect();
-            return postResult;
+            return postResult.toString();
 
         } catch (Exception e) {
-            postResult = e.getMessage() + " _ " + url + " \n" + e.getStackTrace().toString();
+            postResult.append(e.getMessage() + " _ " + url + " \n" + e.getStackTrace().toString());
             httpsConnection.disconnect();
-            return postResult;
+            return postResult.toString();
         }
     }
 }
