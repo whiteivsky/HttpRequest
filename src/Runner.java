@@ -1,13 +1,14 @@
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
+import static java.lang.Thread.sleep;
+
 public class Runner {
 
     public static void main(String... args) throws Exception {
-        HttpRequest request = new HttpRequest();
-        request.setPostUrl("https://omsklotus.gemsdev.ru/api/lotus/newLotusDoc");
-        //request.setHeadersFieldName(new String[]{"authorization","Content-Type"});
-        //request.setHeadersFieldValue(new String[]{"a0fdbf21e69e34f7dab68bb207dbe45eb","application/xml"});
+        HttpRequest request = new HttpRequest("https://omsklotus.gemsdev.ru/api/lotus/newLotusDoc");
+    //    request.addProperty("authorization","a0fdbf21e69e34f7dab68bb207dbe45eb");
+        request.addProperty("Content-Type","application/xml");
         request.setQuery("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                     "<IsogdCoverLetter xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" +
                     "    <Num>Num0</Num>\n" +
@@ -21,6 +22,7 @@ public class Runner {
                     "        </Sender>\n" +
                     "    </Senders>\n" +
                     "</IsogdCoverLetter>");
+        sleep(10);
         System.out.println(request.InvokeHTTP_POST());
     }
 }
