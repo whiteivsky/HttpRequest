@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:element name="IsogdCoverLetter" type="IsogdCoverLetterType"/>
+
+    <xs:complexType name="IsogdCoverLetterType">
+        <xs:annotation>
+            <xs:documentation>Сопроводительное письмо</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="1" name="Num" nillable="false" type="NumType">
+                <xs:annotation>
+                    <xs:documentation>Исх. номер</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element maxOccurs="1" minOccurs="1" name="DateDoc" nillable="false"
+                        type="DateDocType">
+                <xs:annotation>
+                    <xs:documentation>Исх. дата</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+
+            <xs:element minOccurs="1" name="Senders">
+                <xs:annotation>
+                    <xs:documentation>Отправитель</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence maxOccurs="1" minOccurs="1">
+                        <xs:element name="Sender" minOccurs="1" maxOccurs="unbounded"
+                                    nillable="false" type="SenderType">
+
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:element minOccurs="0" name="Files">
+                <xs:annotation>
+                    <xs:documentation>Файлы</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence minOccurs="0" maxOccurs="1">
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="File" nillable="true"
+                                    type="FileType"> </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+
+
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="NumType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="20"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="NoteType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="4000"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="DateDocType">
+        <xs:restriction base="xs:dateTime"> </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="SenderType">
+        <xs:choice minOccurs="1">
+            <xs:element name="SubjPerson" type="SubjPersonType"/>
+            <xs:element name="SubjOrganization" type="SubjOrganizationType"
+            />
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="SubjPersonType">
+        <xs:annotation>
+            <xs:documentation>Физическое лицо</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="LastName" type="LastNameType"/>
+            <xs:element name="FirstName" type="FirstNameType"/>
+            <xs:element name="MiddleName" nillable="true" type="MiddleNameType" minOccurs="0"/>
+            <xs:element name="NumPassport" type="NumPassportType" minOccurs="0" nillable="false"/>
+            <xs:element name="SeriaPassport" type="SeriaPassportType" minOccurs="0" nillable="false"
+            />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="LastNameType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="100"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="FirstNameType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="100"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="MiddleNameType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="100"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="SeriaPassportType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="20"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="NumPassportType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="20"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <xs:complexType name="SubjOrganizationType">
+        <xs:annotation>
+            <xs:documentation>Юридическое лицо</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Name" type="OrganizationNameType"/>
+            <xs:element name="OGRN" type="OrganizationOGRNType" minOccurs="0" nillable="false"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="OrganizationNameType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="1000"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="OrganizationOGRNType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="19"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="FileType">
+        <xs:sequence>
+            <xs:element name="Name" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Название файла</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Type" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Mime-type файла</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Content" type="xs:base64Binary">
+                <xs:annotation>
+                    <xs:documentation>Контент</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="Description" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Описание</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
