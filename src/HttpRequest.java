@@ -41,19 +41,13 @@ public class HttpRequest {
     }
 
     public void addProperty(String name, String value) {
-        if (authorization.equals(name)) authorizationToken = value;
-        else
-            httpsConnection.setRequestProperty(name, value);
+        httpsConnection.setRequestProperty(name, value);
     }
 
     public String InvokeHTTP_POST() {
         StringBuilder postResult = new StringBuilder();
         try {
 
-           // System.out.println(authorization + "->" + authorizationToken);
-           // httpsConnection.setRequestProperty(authorization, authorizationToken);
-            //todo Разобраться почему не всегода работает подключение
-            httpsConnection.setRequestProperty("authorization", "0fdbf21e69e34f7dab68bb207dbe45eb");
             httpsConnection.setDoOutput(true);
             OutputStream os = httpsConnection.getOutputStream();
             os.write(query.getBytes());
