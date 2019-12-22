@@ -23,7 +23,8 @@ public class HttpRequest {
 
 
     public HttpRequest() throws IOException, NoSuchAlgorithmException, KeyManagementException {
-        httpsConnection = (HttpsURLConnection) new URL("https://omsklotus.gemsdev.ru/api/lotus/newLotusDoc").openConnection();
+      //  httpsConnection = (HttpsURLConnection) new URL("https://omsklotus.gemsdev.ru/api/lotus/newLotusDoc").openConnection();
+        httpsConnection = (HttpsURLConnection) new URL("https://omsklotus-isogd.omskportal.ru/api/lotus/newLotusDoc").openConnection();
     }
 
     public void setQuery(String query) {

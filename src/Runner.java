@@ -24,7 +24,8 @@ public class Runner {
                 "</IsogdCoverLetter>");
         request.addProperty("Content-Type", "application/xml");
         request.addProperty("authorization", "0fdbf21e69e34f7dab68bb207dbe45eb");
-        request.setUrl("https://omsklotus.gemsdev.ru/api/lotus/newLotusDoc");
+//        request.setUrl("https://omsklotus.gemsdev.ru/api/lotus/newLotusDoc");
+        request.setUrl("https://omsklotus-isogd.omskportal.ru/api/lotus/newLotusDoc");
         sleep(10);
         System.out.println(request.InvokeHTTP_POST());
     }
