@@ -1,3 +1,5 @@
+import my.HttpRequest;
+
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
@@ -6,7 +8,7 @@ import static java.lang.Thread.sleep;
 public class Runner {
 
     public static void main(String... args) throws Exception {
-        HttpRequest request = new HttpRequest("https://omsklotus.gemsdev.ru/api/lotus/newLotusDoc");
+        HttpRequest request = new HttpRequest();
         request.setQuery("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<IsogdCoverLetter xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" +
                 "    <Num>Num0</Num>\n" +
@@ -22,6 +24,7 @@ public class Runner {
                 "</IsogdCoverLetter>");
         request.addProperty("Content-Type", "application/xml");
         request.addProperty("authorization", "0fdbf21e69e34f7dab68bb207dbe45eb");
+        request.setUrl("https://omsklotus.gemsdev.ru/api/lotus/newLotusDoc");
         sleep(10);
         System.out.println(request.InvokeHTTP_POST());
     }

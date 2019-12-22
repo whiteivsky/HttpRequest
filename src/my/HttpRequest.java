@@ -1,3 +1,4 @@
+package my;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -6,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -20,20 +22,8 @@ public class HttpRequest {
     private String authorizationToken = "0fdbf21e69e34f7dab68bb207dbe45eb";
 
 
-    public HttpRequest(String postUrl) throws IOException, NoSuchAlgorithmException, KeyManagementException {
-        this.url = new URL(postUrl);
-        HostnameVerifier hv = new HostnameVerifier() {
-            public boolean verify(String urlHostName, SSLSession session) {
-                System.out.println("Warning: URL Host: " + urlHostName + " vs. " + session.getPeerHost());
-                return true;
-            }
-        };
-        httpsConnection = (HttpsURLConnection) url.openConnection();
-        SSLContext sc = SSLContext.getInstance("TLSv1.2");
-        sc.init(null, null, new java.security.SecureRandom());
-        httpsConnection.setSSLSocketFactory(sc.getSocketFactory());
-        httpsConnection.setHostnameVerifier(hv);
-        httpsConnection.setRequestMethod("POST");
+    public HttpRequest() throws IOException, NoSuchAlgorithmException, KeyManagementException {
+        httpsConnection = (HttpsURLConnection) new URL("https://omsklotus.gemsdev.ru/api/lotus/newLotusDoc").openConnection();
     }
 
     public void setQuery(String query) {
@@ -45,9 +35,20 @@ public class HttpRequest {
     }
 
     public String InvokeHTTP_POST() {
-        StringBuilder postResult = new StringBuilder();
+        String postResult = "";
         try {
+            HostnameVerifier hv = new HostnameVerifier() {
+                public boolean verify(String urlHostName, SSLSession session) {
+                    System.out.println("Warning: URL Host: " + urlHostName + " vs. " + session.getPeerHost());
+                    return true;
+                }
+            };
 
+            SSLContext sc = SSLContext.getInstance("TLSv1.2");
+            sc.init(null, null, new java.security.SecureRandom());
+            httpsConnection.setSSLSocketFactory(sc.getSocketFactory());
+            httpsConnection.setHostnameVerifier(hv);
+            httpsConnection.setRequestMethod("POST");
             httpsConnection.setDoOutput(true);
             OutputStream os = httpsConnection.getOutputStream();
             os.write(query.getBytes());
@@ -59,23 +60,27 @@ public class HttpRequest {
                 String line;
                 rd = new BufferedReader(new InputStreamReader(httpsConnection.getInputStream(), "UTF-8"));
 
-                postResult.append(httpsConnection.getResponseCode());
+                postResult+=(httpsConnection.getResponseCode());
                 while ((line = rd.readLine()) != null) {
-                    postResult.append(postResult).append(line);
+                    postResult+=(postResult)+ (line);
                 }
                 rd.close();
                 httpsConnection.disconnect();
                 return postResult.toString();
             }
 
-            postResult.append(httpsConnection.getResponseCode() + "----" + httpsConnection.getResponseMessage() + " ~~ " + query.toString());
+            postResult+=(httpsConnection.getResponseCode() + "----" + httpsConnection.getResponseMessage() + " ~~ " + query.toString());
             httpsConnection.disconnect();
             return postResult.toString();
 
         } catch (Exception e) {
-            postResult.append(e.getMessage() + " _ " + url + " \n" + e.getStackTrace().toString());
+            postResult+=(e.getMessage() + " _ " + url + " \n" + e.getStackTrace().toString());
             httpsConnection.disconnect();
             return postResult.toString();
         }
+    }
+
+    public void setUrl(String url) throws MalformedURLException {
+        this.url = new URL(url);
     }
 }
